@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CampusConnect — Ambassador Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06080f;--bg2:#0d1117;--s:rgba(255,255,255,.04);--s2:rgba(255,255,255,.07);
+  --b:rgba(255,255,255,.08);--ba:rgba(0,212,255,.25);--bap:rgba(139,92,246,.25);
+  --cy:#00d4ff;--cy10:rgba(0,212,255,.1);--cy20:rgba(0,212,255,.2);
+  --pu:#8b5cf6;--pu10:rgba(139,92,246,.1);--pu20:rgba(139,92,246,.2);
+  --gr:#10b981;--gr10:rgba(16,185,129,.1);--gr20:rgba(16,185,129,.2);
+  --go:#fbbf24;--go10:rgba(251,191,36,.1);--go20:rgba(251,191,36,.2);
+  --or:#f97316;--or10:rgba(249,115,22,.1);--or20:rgba(249,115,22,.2);
+  --re:#f87171;
+  --t:#eef2ff;--t2:#94a3b8;--t3:#475569;
+  --r:12px;--rl:16px;--rx:24px;
+  --fh:'Outfit',sans-serif;--fb:'Plus Jakarta Sans',sans-serif
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:var(--fb);min-height:100vh;line-height:1.5}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+#app{position:relative;z-index:1}
+
+.landing{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem;gap:2.5rem;text-align:center;background:radial-gradient(ellipse at 30% 20%,rgba(0,212,255,.07) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(139,92,246,.07) 0%,transparent 50%)}
+.landing-logo{font-family:var(--fh);font-size:clamp(2.5rem,8vw,4rem);font-weight:900;letter-spacing:-.05em;line-height:1}
+.landing-logo b{background:linear-gradient(135deg,var(--cy),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.landing-tag{font-size:1rem;color:var(--t2);max-width:440px;line-height:1.7}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:500px;width:100%}
+.role-card{background:var(--s);border:1px solid var(--b);border-radius:var(--rx);padding:30px 24px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.role-card::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;background:linear-gradient(135deg,var(--cy10),transparent)}
+.role-card:hover::after{opacity:1}
+.role-card:hover{border-color:var(--ba);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,212,255,.1)}
+.org-card::after{background:linear-gradient(135deg,var(--pu10),transparent)!important}
+.org-card:hover{border-color:var(--bap)!important;box-shadow:0 20px 40px rgba(139,92,246,.1)!important}
+.role-ico{font-size:2.8rem;margin-bottom:14px}
+.role-name{font-family:var(--fh);font-size:1.1rem;font-weight:800;margin-bottom:6px}
+.role-desc{font-size:.82rem;color:var(--t2)}
+.trust-row{display:flex;gap:24px;justify-content:center;color:var(--t3);font-size:.8rem;flex-wrap:wrap}
+.trust-row b{color:var(--cy)}
+
+.ob-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;background:radial-gradient(ellipse at center,rgba(0,212,255,.05) 0%,transparent 60%)}
+.ob-card{background:var(--s2);border:1px solid var(--ba);border-radius:var(--rx);padding:40px;max-width:460px;width:100%;box-shadow:0 0 60px rgba(0,212,255,.12);text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+.ob-step{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cy);margin-bottom:8px}
+.ob-q{font-family:var(--fh);font-size:1.6rem;font-weight:900;margin-bottom:6px}
+.ob-hint{font-size:.82rem;color:var(--t2);margin-bottom:24px}
+.ob-dots{display:flex;gap:6px;justify-content:center;margin-bottom:28px}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--b);transition:all .2s}
+.ob-dot.on{background:var(--cy);box-shadow:0 0 8px var(--cy)}
+.av-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:24px}
+.av-opt{width:50px;height:50px;border-radius:50%;background:var(--s);border:2px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;transition:all .2s;margin:0 auto}
+.av-opt.sel{border-color:var(--cy);background:var(--cy10);box-shadow:0 0 14px rgba(0,212,255,.4);transform:scale(1.1)}
+.av-opt:hover:not(.sel){border-color:var(--ba);transform:scale(1.05)}
+.col-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;text-align:left}
+.col-opt{padding:9px 14px;background:var(--s);border:1px solid var(--b);border-radius:var(--r);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+.col-opt:hover{border-color:var(--ba);background:var(--cy10)}
+.col-opt.sel{border-color:var(--cy);background:var(--cy10);color:var(--cy);font-weight:700}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:rgba(6,8,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100}
+.brand{font-family:var(--fh);font-size:1.3rem;font-weight:900;letter-spacing:-.03em;cursor:pointer}
+.brand b{background:linear-gradient(135deg,var(--cy),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.topbar-r{display:flex;align-items:center;gap:10px}
+.streak-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;background:var(--or10);border:1px solid var(--or20);border-radius:999px;font-size:.78rem;font-weight:700;color:var(--or)}
+.level-pill{padding:5px 14px;background:var(--s2);border:1px solid var(--ba);border-radius:999px;font-size:.78rem;font-weight:700;color:var(--cy)}
+.pts-badge{font-family:var(--fh);font-size:1rem;font-weight:900;background:linear-gradient(135deg,var(--cy),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.av-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pu),var(--cy));display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;border:none;transition:transform .2s}
+.av-btn:hover{transform:scale(1.1)}
+
+.tabs{display:flex;padding:0 24px;background:rgba(6,8,15,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--b);overflow-x:auto;scrollbar-width:none;gap:2px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:12px 18px;border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;font-family:var(--fb);font-size:.85rem;font-weight:600;color:var(--t2);white-space:nowrap;transition:all .2s}
+.tab:hover{color:var(--t)}
+.tab.on{color:var(--cy);border-bottom-color:var(--cy)}
+
+.content{padding:22px 24px;max-width:880px;margin:0 auto}
+
+.card{background:var(--s);border:1px solid var(--b);border-radius:var(--rl);padding:18px 22px;margin-bottom:14px;transition:border-color .2s}
+.card-glow{background:linear-gradient(135deg,rgba(0,212,255,.07),rgba(139,92,246,.07));border-color:var(--ba);box-shadow:0 0 40px rgba(0,212,255,.08)}
+.card-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+
+.hero-card{background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(139,92,246,.08));border:1px solid rgba(0,212,255,.2);border-radius:var(--rx);padding:22px 26px;margin-bottom:14px;box-shadow:0 0 50px rgba(0,212,255,.07)}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:12px}
+.hero-name{font-family:var(--fh);font-size:1.4rem;font-weight:900;margin-bottom:4px}
+.hero-sub{font-size:.8rem;color:var(--t2)}
+.hero-pts-wrap{text-align:right;flex-shrink:0}
+.hero-pts{font-family:var(--fh);font-size:2.5rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--cy),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-pts-sub{font-size:.72rem;color:var(--t3)}
+.xp-track{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-top:10px;position:relative}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--cy),var(--pu));border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1);position:relative}
+.xp-fill::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:#fff;border-radius:2px;opacity:.7;animation:glow-pulse 2s infinite}
+@keyframes glow-pulse{0%,100%{opacity:.7;box-shadow:0 0 4px #fff}50%{opacity:.2}}
+.xp-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--t3);margin-top:6px}
+
+.sg4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.sg3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:14px 16px}
+.sc-n{font-family:var(--fh);font-size:1.8rem;font-weight:800;line-height:1;margin-bottom:4px}
+.sc-l{font-size:.73rem;color:var(--t2)}
+
+.btn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:var(--r);padding:10px 20px;font-family:var(--fb);font-size:.875rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+.btn-cy{background:linear-gradient(135deg,var(--cy20),var(--cy10));border:1px solid rgba(0,212,255,.4);color:var(--cy)}
+.btn-cy:hover{background:var(--cy20);box-shadow:0 0 20px rgba(0,212,255,.25);transform:translateY(-1px)}
+.btn-solid{background:linear-gradient(135deg,var(--cy),#0099cc);color:#000;font-weight:800}
+.btn-solid:hover{box-shadow:0 0 24px rgba(0,212,255,.4);transform:translateY(-1px)}
+.btn-gr{background:linear-gradient(135deg,var(--gr20),var(--gr10));border:1px solid rgba(16,185,129,.4);color:var(--gr)}
+.btn-gr:hover{background:var(--gr20);box-shadow:0 0 20px rgba(16,185,129,.2)}
+.btn-ghost{background:var(--s);border:1px solid var(--b);color:var(--t2)}
+.btn-ghost:hover{border-color:rgba(255,255,255,.2);color:var(--t)}
+.btn-go{background:linear-gradient(135deg,var(--go20),var(--go10));border:1px solid rgba(251,191,36,.4);color:var(--go)}
+.btn-pu{background:linear-gradient(135deg,var(--pu20),var(--pu10));border:1px solid rgba(139,92,246,.4);color:var(--pu)}
+
+.input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--b);border-radius:var(--r);padding:12px 16px;font-size:.9rem;color:var(--t);font-family:var(--fb);outline:none;transition:border-color .2s,box-shadow .2s}
+.input:focus{border-color:var(--ba);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+.input::placeholder{color:var(--t3)}
+select.input{cursor:pointer}
+
+.ring-wrap{position:relative;flex-shrink:0}
+.ring-svg{transform:rotate(-90deg)}
+.ring-track{fill:none;stroke:rgba(255,255,255,.06);stroke-width:7}
+.ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-n{font-family:var(--fh);font-weight:900;line-height:1}
+.ring-s{font-size:.6rem;color:var(--t3)}
+
+.dq-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,.03);border:1px solid var(--b);border-radius:var(--r);transition:all .2s}
+.dq-row:hover{border-color:var(--ba);background:rgba(0,212,255,.04)}
+.dq-row.done{opacity:.55}
+.dq-ico{font-size:1.4rem;width:38px;text-align:center;flex-shrink:0}
+.dq-info{flex:1}
+.dq-title{font-size:.88rem;font-weight:700;margin-bottom:2px}
+.dq-pts{font-size:.75rem;color:var(--t2)}
+.dq-cta{background:var(--cy10);border:1px solid rgba(0,212,255,.3);color:var(--cy);border-radius:8px;padding:5px 12px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:var(--fb);transition:all .2s;white-space:nowrap}
+.dq-cta:hover{background:var(--cy20);box-shadow:0 0 12px rgba(0,212,255,.2)}
+
+.task-card{background:var(--s);border:1px solid var(--b);border-radius:var(--rl);padding:16px 20px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;transition:all .2s}
+.task-card:hover{border-color:rgba(255,255,255,.13)}
+.task-card.done{opacity:.5}
+.task-ico-box{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+.task-info{flex:1;min-width:0}
+.task-title{font-size:.9rem;font-weight:700;margin-bottom:4px}
+.task-desc{font-size:.78rem;color:var(--t2);line-height:1.5}
+.task-meta{margin-top:7px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cat-tag{font-size:.68rem;padding:2px 9px;border-radius:999px;font-weight:700}
+.ct-Social{background:var(--cy10);color:var(--cy)}
+.ct-Referral{background:var(--pu10);color:var(--pu)}
+.ct-Event{background:var(--gr10);color:var(--gr)}
+.ct-GitHub{background:var(--go10);color:var(--go)}
+.ct-Content{background:var(--or10);color:var(--or)}
+.task-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.task-pts{font-family:var(--fh);font-size:.95rem;font-weight:800;color:var(--gr)}
+
+.fp-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.fp{padding:6px 14px;border-radius:999px;border:1px solid var(--b);background:transparent;font-size:.78rem;font-weight:700;color:var(--t2);cursor:pointer;font-family:var(--fb);transition:all .15s}
+.fp:hover{border-color:var(--ba);color:var(--t)}
+.fp.on{background:var(--cy10);border-color:rgba(0,212,255,.4);color:var(--cy)}
+
+.prog-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--cy),var(--gr));border-radius:3px;transition:width .8s ease}
+
+.podium{display:flex;justify-content:center;align-items:flex-end;gap:10px;margin-bottom:24px;padding-bottom:4px}
+.pod-slot{display:flex;flex-direction:column;align-items:center}
+.pod-av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;margin-bottom:6px;border:3px solid}
+.pod-av-1{width:60px;height:60px;font-size:1rem;background:linear-gradient(135deg,#fbbf24,#f59e0b);border-color:#fbbf24;box-shadow:0 0 24px rgba(251,191,36,.45)}
+.pod-av-2{width:50px;height:50px;font-size:.88rem;background:linear-gradient(135deg,#94a3b8,#64748b);border-color:#94a3b8;box-shadow:0 0 14px rgba(148,163,184,.3)}
+.pod-av-3{width:46px;height:46px;font-size:.82rem;background:linear-gradient(135deg,#cd853f,#a0522d);border-color:#cd853f;box-shadow:0 0 14px rgba(205,133,63,.3)}
+.pod-bar{border-radius:8px 8px 0 0;width:88px;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:10px 6px;border:1px solid var(--b)}
+.pod-bar-1{height:110px;background:linear-gradient(180deg,rgba(251,191,36,.15),rgba(251,191,36,.03));border-color:rgba(251,191,36,.3)}
+.pod-bar-2{height:80px;background:linear-gradient(180deg,rgba(148,163,184,.1),transparent)}
+.pod-bar-3{height:64px;background:linear-gradient(180deg,rgba(205,133,63,.1),transparent)}
+.pod-rank{font-size:.75rem;font-weight:800;margin-bottom:3px}
+.pod-name{font-size:.72rem;font-weight:700;text-align:center;margin-top:6px;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod-pts{font-size:.68rem;color:var(--t2)}
+
+.lb-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--r);transition:background .15s;margin-bottom:4px}
+.lb-row:hover{background:var(--s)}
+.lb-row.me{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2)}
+.lb-rank{font-family:var(--fh);font-weight:800;width:30px;text-align:center;font-size:.9rem}
+.lb-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:#fff;flex-shrink:0}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-size:.88rem;font-weight:700}
+.lb-college{font-size:.72rem;color:var(--t2)}
+.lb-right{text-align:right}
+.lb-pts{font-family:var(--fh);font-size:.95rem;font-weight:800;color:var(--cy)}
+.lb-streak{font-size:.7rem;color:var(--t2)}
+
+.gh-result-top{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.gh-name{font-family:var(--fh);font-size:1.4rem;font-weight:900;margin-bottom:6px}
+.gh-meta{font-size:.8rem;color:var(--t2);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.gh-verdict{font-size:.88rem;font-weight:700}
+.v-90{color:var(--gr)}.v-70{color:var(--cy)}.v-50{color:var(--go)}.v-30{color:var(--or)}.v-0{color:var(--re)}
+
+.bk-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bk-label{font-size:.76rem;color:var(--t2);width:120px;flex-shrink:0}
+.bk-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.bk-fill{height:100%;border-radius:3px;transition:width .9s ease}
+.bk-num{font-size:.76rem;font-weight:700;width:28px;text-align:right;flex-shrink:0}
+
+.in-list{list-style:none}
+.in-item{display:flex;gap:8px;padding:5px 0;font-size:.83rem;color:var(--t2);align-items:flex-start;line-height:1.5}
+.in-ico{flex-shrink:0;margin-top:2px}
+
+.ai-box{background:linear-gradient(135deg,rgba(139,92,246,.07),rgba(0,212,255,.05));border:1px solid rgba(139,92,246,.25);border-radius:var(--rl);padding:18px 22px;margin-top:14px}
+.ai-lbl{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pu);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ai-txt{font-size:.88rem;color:var(--t2);line-height:1.75}
+
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px}
+.badge-card{background:var(--s);border:1px solid var(--b);border-radius:var(--rl);padding:20px 14px;text-align:center;transition:all .25s;filter:grayscale(.4)}
+.badge-card.earned{border-color:rgba(0,212,255,.3);background:linear-gradient(135deg,rgba(0,212,255,.06),transparent);filter:none;box-shadow:0 0 20px rgba(0,212,255,.08)}
+.badge-card.earned:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,212,255,.15)}
+.badge-locked{opacity:.35;filter:grayscale(.7)}
+.badge-ico{font-size:2rem;margin-bottom:10px}
+.badge-name{font-size:.82rem;font-weight:700;margin-bottom:4px}
+.badge-desc{font-size:.7rem;color:var(--t2);line-height:1.5}
+.badge-pts{font-size:.68rem;color:var(--cy);font-weight:700;margin-top:6px}
+.badge-check{font-size:.7rem;color:var(--gr);font-weight:700;margin-top:5px}
+
+#toast-wrap{position:fixed;bottom:22px;right:22px;z-index:999;display:flex;flex-direction:column;gap:8px;max-width:310px}
+.toast{background:var(--bg2);border-radius:var(--r);padding:12px 16px;font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:9px;animation:toastIn .35s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.toast-gr{border:1px solid rgba(16,185,129,.4);color:var(--gr)}
+.toast-cy{border:1px solid rgba(0,212,255,.4);color:var(--cy)}
+.toast-go{border:1px solid rgba(251,191,36,.4);color:var(--go)}
+.toast-pu{border:1px solid rgba(139,92,246,.4);color:var(--pu)}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+.xp-float{position:fixed;font-family:var(--fh);font-size:1.1rem;font-weight:900;color:var(--gr);pointer-events:none;z-index:1000;text-shadow:0 0 12px rgba(16,185,129,.5);animation:xpUp 1.8s ease forwards}
+@keyframes xpUp{0%{opacity:1;transform:translateY(0) scale(1)}60%{opacity:1;transform:translateY(-55px) scale(1.2)}100%{opacity:0;transform:translateY(-90px) scale(.9)}}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(6,8,15,.88);backdrop-filter:blur(10px);z-index:500;display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-card{background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(139,92,246,.1));border:2px solid rgba(0,212,255,.4);border-radius:var(--rx);padding:48px 40px;text-align:center;max-width:380px;width:90%;box-shadow:0 0 80px rgba(0,212,255,.2);animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-ico{font-size:4rem;margin-bottom:16px;display:block;animation:bouncePop .6s ease .25s backwards}
+@keyframes bouncePop{from{transform:scale(0)}70%{transform:scale(1.2)}to{transform:scale(1)}}
+.modal-title{font-family:var(--fh);font-size:2rem;font-weight:900;margin-bottom:8px}
+.modal-sub{font-size:.9rem;color:var(--t2);margin-bottom:24px;line-height:1.6}
+
+.cf{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:600;animation:cfFall var(--d,3s) ease var(--dl,0s) forwards}
+@keyframes cfFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+
+.org-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.org-kpi{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;text-align:center}
+.org-kpi-n{font-family:var(--fh);font-size:2rem;font-weight:900;line-height:1;margin-bottom:4px}
+.org-kpi-l{font-size:.75rem;color:var(--t2)}
+
+.flex{display:flex}.fca{display:flex;align-items:center}.fb{display:flex;align-items:center;justify-content:space-between}
+.g4{gap:4px}.g8{gap:8px}.g12{gap:12px}.g16{gap:16px}.g20{gap:20px}
+.wrap{flex-wrap:wrap}.f1{flex:1}.mn0{min-width:0}
+.mb4{margin-bottom:4px}.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb14{margin-bottom:14px}.mb16{margin-bottom:16px}.mb20{margin-bottom:20px}
+.mt6{margin-top:6px}.mt8{margin-top:8px}.mt12{margin-top:12px}
+.fw8{font-weight:800}.fw7{font-weight:700}
+.fh{font-family:var(--fh)}.fb-f{font-family:var(--fb)}
+.fs-sm{font-size:.82rem}.fs-xs{font-size:.72rem}.fs-lg{font-size:1.05rem}
+.c2{color:var(--t2)}.c3{color:var(--t3)}.ccy{color:var(--cy)}.cgr{color:var(--gr)}.cgo{color:var(--go)}.cor{color:var(--or)}.cpu{color:var(--pu)}
+.sep{height:1px;background:var(--b);margin:16px 0}
+.sh-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sh-title{font-family:var(--fh);font-size:1.05rem;font-weight:800}
+.tac{text-align:center}
+
+@media(max-width:640px){
+  .sg4{grid-template-columns:repeat(2,1fr)}
+  .sg2{grid-template-columns:1fr}
+  .role-grid,.col-grid{grid-template-columns:1fr;max-width:300px}
+  .badge-grid{grid-template-columns:repeat(3,1fr)}
+  .org-kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .content{padding:16px}
+  .topbar,.tabs{padding-left:16px;padding-right:16px}
+  .ob-card{padding:28px 22px}
+  .pod-bar{width:72px}
+  .pod-av-1{width:52px;height:52px}.pod-av-2{width:44px;height:44px}.pod-av-3{width:40px;height:40px}
+  .gh-result-top{flex-direction:column}
+}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast-wrap"></div>
+<div id="modal-wrap"></div>
+
+<script>
+// ═══════════════════════════════════════
+//  DATA LAYER
+// ═══════════════════════════════════════
+const LEVELS=[
+  {name:"Rookie",      min:0,    color:"#94a3b8",badge:"🌱"},
+  {name:"Rising Star", min:500,  color:"#00d4ff",badge:"⭐"},
+  {name:"Campus Pro",  min:1500, color:"#8b5cf6",badge:"🚀"},
+  {name:"Campus Hero", min:3000, color:"#fbbf24",badge:"🏆"},
+  {name:"Legend",      min:5000, color:"#f87171",badge:"👑"},
+];
+const getLevel=p=>[...LEVELS].reverse().find(l=>p>=l.min)||LEVELS[0];
+const getNext=p=>LEVELS.find(l=>l.min>p);
+const AVATARS=["🦁","🐯","🦊","🐺","🐻","🦋"];
+const AV_COLORS=["#3b82f6","#059669","#7c3aed","#b45309","#be185d","#0e7490","#1d4ed8"];
+const COLLEGES=["IIT Hyderabad","JNTU Hyderabad","Osmania University","BITS Pilani","VIT Vellore","NIT Warangal","IIIT Hyderabad","Amrita University","RVCE Bangalore","Manipal University","Other"];
+
+const AMBASSADORS=[
+  {id:1,name:"Arjun Sharma", college:"IIT Delhi", pts:4250,streak:21,ghScore:87,initials:"AS",av:"#3b82f6"},
+  {id:2,name:"Priya Nair",   college:"NIT Trichy", pts:3890,streak:14,ghScore:79,initials:"PN",av:"#059669"},
+  {id:3,name:"Rahul Gupta",  college:"BITS Pilani", pts:3200,streak:7, ghScore:72,initials:"RG",av:"#7c3aed"},
+  {id:4,name:"Sneha Roy",    college:"VIT Vellore", pts:2850,streak:5, ghScore:65,initials:"SR",av:"#b45309"},
+  {id:5,name:"Vikram Singh", college:"IIIT Hyd",    pts:2100,streak:3, ghScore:58,initials:"VS",av:"#be185d"},
+  {id:6,name:"Ananya K",     college:"Osmania Univ", pts:1950,streak:0, ghScore:52,initials:"AK",av:"#0e7490"},
+];
+
+const INIT_TASKS=[
+  {id:1,title:"Share UnsaidTalks on LinkedIn",         pts:150,cat:"Social",   done:false,desc:"Post about UnsaidTalks and tag 3 friends",ico:"📢"},
+  {id:2,title:"Refer 3 college friends to sign up",    pts:300,cat:"Referral", done:true, desc:"Get 3 friends to register using your referral code",ico:"🎯"},
+  {id:3,title:"Host a campus session (20+ attendees)", pts:500,cat:"Event",    done:false,desc:"Organize and lead a campus-level workshop or session",ico:"🎤"},
+  {id:4,title:"Improve your GitHub README",            pts:100,cat:"GitHub",   done:true, desc:"Add a comprehensive README to your top repository",ico:"💻"},
+  {id:5,title:"Submit a video testimonial",            pts:200,cat:"Content",  done:false,desc:"Record a 60-second testimonial about your experience",ico:"🎬"},
+  {id:6,title:"Create an Instagram reel",              pts:250,cat:"Content",  done:false,desc:"Showcase UnsaidTalks in a creative 30-second reel",ico:"📸"},
+  {id:7,title:"Post about your CA journey",            pts:100,cat:"Social",   done:false,desc:"Share your ambassador experience publicly",ico:"📱"},
+  {id:8,title:"Engage with 5 UnsaidTalks posts",       pts:50, cat:"Social",   done:false,desc:"Like, comment, and share 5 official posts this week",ico:"💬"},
+];
+
+const DAILY_QUESTS=[
+  {id:1,title:"Daily check-in completed",        pts:50, done:true, ico:"✅"},
+  {id:2,title:"Analyze a GitHub profile",        pts:100,done:false,ico:"⭐",action:"github"},
+  {id:3,title:"Share CampusConnect with a friend",pts:75,done:false,ico:"🎯",action:"tasks"},
+];
+
+const BADGES_DATA=[
+  {name:"GitHub Star",    desc:"Score 70+ on GitHub analysis",   earned:false,ico:"⭐",pts:200},
+  {name:"Week Warrior",   desc:"Maintain a 7-day active streak", earned:true, ico:"🔥",pts:300},
+  {name:"Social Pro",     desc:"Complete all 3 social tasks",    earned:false,ico:"📢",pts:150},
+  {name:"Referral King",  desc:"10 successful referrals",        earned:false,ico:"🎯",pts:500},
+  {name:"Event Host",     desc:"Host a campus session",          earned:false,ico:"🎤",pts:400},
+  {name:"Content Creator",desc:"Submit 3 content pieces",        earned:false,ico:"🎬",pts:250},
+  {name:"Top 10",         desc:"Reach leaderboard top 10",       earned:true, ico:"🏆",pts:100},
+  {name:"Legend",         desc:"Reach 5000 total XP",            earned:false,ico:"👑",pts:1000},
+];
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let S={
+  view:"landing",       // landing|onboard|ambassador|org
+  tab:"dashboard",
+  orgTab:"overview",
+  onboardStep:1,
+  obName:"",obCollege:"",obAvatar:"🦁",
+  myName:"",myCollege:"",myAvatar:"🦁",
+  myPts:1850,myStreak:4,myGhScore:0,
+  myGhScoreBreakdown:null,
+  tasks:JSON.parse(JSON.stringify(INIT_TASKS)),
+  dailyQuests:JSON.parse(JSON.stringify(DAILY_QUESTS)),
+  taskFilter:"All",
+  ghInput:"",ghLoading:false,ghResult:null,ghError:"",
+  aiText:"",aiLoading:false,
+};
+
+function setState(p){Object.assign(S,p);render()}
+
+// ═══════════════════════════════════════
+//  DOM HELPERS
+// ═══════════════════════════════════════
+function el(tag,attrs,...ch){
+  const e=document.createElement(tag);
+  for(const[k,v]of Object.entries(attrs||{})){
+    if(k==="className")e.className=v;
+    else if(k==="style")e.style.cssText=v;
+    else if(k.startsWith("on"))e.addEventListener(k.slice(2).toLowerCase(),v);
+    else e.setAttribute(k,v);
+  }
+  for(const c of ch.flat(Infinity)){
+    if(c==null||c===false)continue;
+    if(typeof c==="object" && !(c instanceof Node))continue; // Skip raw objects
+    e.appendChild(typeof c==="string"||typeof c==="number"?document.createTextNode(String(c)):c);
+  }
+  return e;
+}
+
+function _process(cls, ch) {
+  let attrs = {className: cls};
+  let children = [];
+  for (let c of ch) {
+    if (c && typeof c === 'object' && !(c instanceof Node) && !Array.isArray(c)) Object.assign(attrs, c);
+    else children.push(c);
+  }
+  return {attrs, children};
+}
+
+function div(cls,...ch){ const p=_process(cls,ch); return el("div",p.attrs,...p.children); }
+function span(cls,...ch){ const p=_process(cls,ch); return el("span",p.attrs,...p.children); }
+
+function btn(cls,label,onClick,disabled){
+  const b=el("button",{className:"btn "+cls,onClick},label);
+  if(disabled)b.disabled=true;
+  return b;
+}
+
+function btnS(cls,style,label,onClick,disabled){
+  const b=el("button",{className:"btn "+cls,onClick},label);
+  if(style)b.style.cssText=style;
+  if(disabled)b.disabled=true;
+  return b;
+}
+
+function inp(cls,opts){
+  const i=el("input",{className:cls,...(opts.placeholder?{placeholder:opts.placeholder}:{})});
+  if(opts.value!==undefined)i.value=opts.value;
+  if(opts.type)i.type=opts.type;
+  if(opts.onInput)i.addEventListener("input",opts.onInput);
+  if(opts.onKeydown)i.addEventListener("keydown",opts.onKeydown);
+  return i;
+}
+
+// ═══════════════════════════════════════
+//  NOTIFICATIONS & ANIMATIONS
+// ═══════════════════════════════════════
+function toast(msg,type="gr"){
+  const wrap=document.getElementById("toast-wrap");
+  const t=div("toast toast-"+type,"✦ "+msg);
+  wrap.appendChild(t);
+  setTimeout(()=>t.remove(),3500);
+}
+
+function floatXP(pts,e){
+  const r=(e instanceof Element)?e.getBoundingClientRect():{top:window.innerHeight/2,left:window.innerWidth/2};
+  const f=div("xp-float","+"+pts+" XP");
+  f.style.cssText=`left:${r.left+20}px;top:${r.top-10}px`;
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),1900);
+}
+
+function confetti(){
+  const colors=["#00d4ff","#8b5cf6","#10b981","#fbbf24","#f87171","#f97316"];
+  for(let i=0;i<60;i++){
+    const c=div("cf");
+    c.style.cssText=`left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};--d:${2+Math.random()*2}s;--dl:${Math.random()*.8}s`;
+    c.style.borderRadius=Math.random()>.5?"50%":"2px";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+
+function showModal(type,data={}){
+  const wrap=document.getElementById("modal-wrap");
+  wrap.innerHTML="";
+  if(type==="levelup"){
+    confetti();
+    const overlay=div("modal-overlay",
+      div("modal-card",
+        el("span",{className:"modal-ico"},data.badge||"🏆"),
+        div("modal-title fh","LEVEL UP!"),
+        div("modal-sub c2",`You've reached ${data.name}!\nKeep going — you're crushing it 🔥`),
+        btn("btn-solid btn","Awesome! Let's go",()=>{wrap.innerHTML="";render()})
+      )
+    );
+    wrap.appendChild(overlay);
+  } else if(type==="badge"){
+    confetti();
+    const overlay=div("modal-overlay",
+      div("modal-card",
+        el("span",{className:"modal-ico"},data.ico||"🏅"),
+        div("modal-title fh","Badge Unlocked!"),
+        div("fh fw8 mb8",data.name),
+        div("modal-sub c2",data.desc+`\n+${data.pts} bonus XP earned!`),
+        btn("btn-solid btn","Sweet!",()=>{wrap.innerHTML="";render()})
+      )
+    );
+    wrap.appendChild(overlay);
+  }
+}
+
+// ═══════════════════════════════════════
+//  GITHUB SCORING ENGINE
+// ═══════════════════════════════════════
+function scoreGH(user,repos){
+  let s=0;const good=[],imp=[];
+  const breakdown={profile:0,repos:0,activity:0,community:0,branding:0};
+
+  // Profile (25pts)
+  let p=0;
+  if(user.bio){p+=10;good.push("Compelling bio — great first impression")} else imp.push("Add a bio — it's the first thing recruiters read");
+  if(user.avatar_url&&!user.avatar_url.includes("gravatar")){p+=5;good.push("Professional profile photo")} else imp.push("Set a real profile photo — it matters");
+  if(user.blog){p+=5;good.push("Portfolio/website linked")} else imp.push("Link your portfolio or LinkedIn profile");
+  if(user.location){p+=3;good.push("Location visible")}
+  if(user.hireable){p+=2;good.push("Open to opportunities — recruiters love this")}
+  breakdown.profile=p; s+=p;
+
+  // Repos (25pts)
+  let rv=0;
+  rv+=Math.min(Math.round((user.public_repos/30)*12),12);
+  const stars=repos.reduce((acc,r)=>acc+r.stargazers_count,0);
+  rv+=Math.min(stars*2,8);
+  const withDesc=repos.filter(r=>r.description).length;
+  rv+=Math.min(withDesc,5);
+  
+  if(user.public_repos<5)imp.push("Build more public projects — aim for 10+"); else good.push(`${user.public_repos} public repositories`);
+  if(stars>5)good.push(`${stars} total stars earned`); else imp.push("Work on projects others star — signals quality to recruiters");
+  if(withDesc<repos.length*.5)imp.push("Add descriptions to your repos");
+  breakdown.repos=rv; s+=rv;
+
+  // Activity (20pts)
+  let av=0;
+  const recent=repos.filter(r=>(Date.now()-new Date(r.updated_at))/86400000<90).length;
+  av+=Math.min(recent*4,20);
+  if(recent===0)imp.push("No recent activity — commit regularly to stay visible"); else good.push(`${recent} repos updated in the last 3 months`);
+  breakdown.activity=av; s+=av;
+
+  // Community (15pts)
+  let cv=0;
+  cv+=Math.min(Math.round(user.followers/5),12);
+  if(user.following>0)cv+=3;
+  if(user.followers<10)imp.push("Grow your GitHub network — follow peers & open-source devs"); else good.push(`${user.followers} followers — solid community presence`);
+  breakdown.community=cv; s+=cv;
+
+  // Branding (15pts)
+  let bv=0;
+  if(repos.some(r=>r.name===user.login)){bv+=6;good.push("Has a profile README — excellent personal branding")} else imp.push("Create a profile README — it's your GitHub homepage");
+  if(user.public_gists>0){bv+=4;good.push(`${user.public_gists} gists — shows knowledge sharing`)}
+  if(user.twitter_username){bv+=3;good.push("Twitter/X linked to profile")}
+  if(user.email){bv+=2;good.push("Email publicly available")}
+  breakdown.branding=bv; s+=bv;
+
+  return{score:Math.min(s,100),good,imp,breakdown,stars,user,repos};
+}
+
+async function analyzeGitHub(){
+  if(!S.ghInput.trim()||S.ghLoading)return;
+  setState({ghLoading:true,ghResult:null,ghError:"",aiText:"",aiLoading:false});
+  
+  try{
+    const[uRes,rRes]=await Promise.all([
+      fetch(`https://api.github.com/users/${S.ghInput.trim()}`),
+      fetch(`https://api.github.com/users/${S.ghInput.trim()}/repos?sort=updated&per_page=20`)
+    ]);
+    if(!uRes.ok)throw new Error("GitHub user not found. Double-check the username.");
+    
+    const[user,repos]=await Promise.all([uRes.json(),rRes.json()]);
+    const result=scoreGH(user,repos);
+    
+    const xpGain=result.score>=70?200:result.score>=50?100:50;
+    const prevPts=S.myPts;
+    
+    S.myPts+=xpGain;
+    S.myGhScore=result.score;
+    S.ghResult=result;
+    S.ghLoading=false;
+    S.aiLoading=true;
+    
+    toast(`GitHub score: ${result.score}/100 — +${xpGain} XP! 🎯`,"cy");
+    
+    // Check level up
+    const newLv=getLevel(S.myPts);
+    const oldLv=getLevel(prevPts);
+    if(newLv.name!==oldLv.name){setTimeout(()=>showModal("levelup",newLv),600)}
+    
+    // Check badge
+    if(result.score>=70&&!BADGES_DATA[0].earned){
+      BADGES_DATA[0].earned=true;
+      setTimeout(()=>showModal("badge",BADGES_DATA[0]),2000);
+    }
+    
+    render();
+
+    // Claude AI
+    const langs=[...new Set(repos.map(r=>r.language).filter(Boolean))].slice(0,6);
+    
+    const aiRes=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01"},
+      body:JSON.stringify({
+        model:"claude-3-sonnet-20240229",max_tokens:1000,
+        messages:[{role:"user",content:`You are a senior technical recruiter at a top tech company reviewing a GitHub profile to decide if this person is worth reaching out to. Give a direct, candid, and actionable assessment in exactly 2 concise paragraphs. No fluff. 
+        
+Paragraph 1 (3-4 sentences): What genuinely stands out — specific things that would make a recruiter take notice. Mention specific projects, languages, or patterns you see.
+Paragraph 2 (3-4 sentences): The top 2-3 improvements that would most increase their chances of getting recruited, with specific actions they can take TODAY.
+
+Profile data:
+- Name: ${user.name||user.login}
+- Bio: ${user.bio||"(empty)"}
+- Repos: ${user.public_repos} public | Followers: ${user.followers} | Stars earned: ${result.stars}
+- Location: ${user.location||"not set"} | Website: ${user.blog||"not linked"}
+- Languages: ${langs.join(", ")||"none detected"}
+- Top repos: ${repos.slice(0,5).map(r=>`${r.name}(${r.stargazers_count}⭐,${r.language||"—"})`).join(", ")}
+- Score: ${result.score}/100
+
+Keep it under 150 words total. Write like you're giving advice to a friend, not writing a report.`}]
+      })
+    });
+    
+    if(aiRes.ok){const d=await aiRes.json();S.aiText=d.content?.[0]?.text||""}
+    
+  }catch(err){S.ghError=err.message}
+  finally{S.ghLoading=false;S.aiLoading=false;render()}
+}
+
+// ═══════════════════════════════════════
+//  ACTIONS
+// ═══════════════════════════════════════
+function completeTask(id,e){
+  const t=S.tasks.find(x=>x.id===id);
+  if(!t||t.done)return;
+  
+  const prevPts=S.myPts;
+  S.tasks=S.tasks.map(x=>x.id===id?{...x,done:true}:x);
+  S.myPts+=t.pts;
+  
+  floatXP(t.pts,e.currentTarget);
+  toast(`+${t.pts} XP — task completed! 🎯`,"gr");
+  
+  const newLv=getLevel(S.myPts), oldLv=getLevel(prevPts);
+  if(newLv.name!==oldLv.name)setTimeout(()=>showModal("levelup",newLv),600);
+  
+  render();
+}
+
+function completeQuest(id,action,e){
+  const q=S.dailyQuests.find(x=>x.id===id);
+  if(!q||q.done)return;
+  
+  S.dailyQuests=S.dailyQuests.map(x=>x.id===id?{...x,done:true}:x);
+  S.myPts+=q.pts;
+  
+  floatXP(q.pts,e.currentTarget);
+  toast(`Daily Quest done! +${q.pts} XP ✅`,"go");
+  
+  if(action)setState({tab:action});
+  else render();
+}
+
+function finishOnboarding(){
+  if(!S.obName.trim())return toast("Enter your name to continue","cy");
+  if(!S.obCollege)return toast("Pick your college","cy");
+  
+  const prevPts=S.myPts;
+  setState({view:"ambassador",tab:"dashboard",myName:S.obName.trim(),myCollege:S.obCollege,myAvatar:S.obAvatar,myPts:S.myPts+100});
+  
+  toast(`Welcome, ${S.obName.trim()}! +100 XP for joining 🎉`,"gr");
+}
+
+// ═══════════════════════════════════════
+//  RING COMPONENT
+// ═══════════════════════════════════════
+function Ring(score,size,color){
+  const R=size/2-8, C=2*Math.PI*R;
+  const pct=Math.min(score,100)/100;
+  
+  const wrap=div("ring-wrap");
+  wrap.style.width=size+"px"; wrap.style.height=size+"px";
+  
+  const svg=el("svg",{className:"ring-svg",width:size,height:size,viewBox:`0 0 ${size} ${size}`},
+    el("circle",{className:"ring-track",cx:size/2,cy:size/2,r:R}),
+    el("circle",{className:"ring-fill",cx:size/2,cy:size/2,r:R,stroke:color,
+      "stroke-dasharray":C,"stroke-dashoffset":C*(1-pct)})
+  );
+  
+  const center=div("ring-center",
+    el("div",{className:"ring-n fh",style:`color:${color};font-size:${size*.25}px`},String(score)),
+    el("div",{className:"ring-s"},"/100")
+  );
+  
+  wrap.appendChild(svg); wrap.appendChild(center);
+  return wrap;
+}
+
+// ═══════════════════════════════════════
+//  VIEWS
+// ═══════════════════════════════════════
+function vLanding(){
+  const googleSVG = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48" style="margin-right:8px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>`;
+  
+  const gBtn = el("button",{className:"btn",style:"width:100%; justify-content:center; background:#fff; color:#000; font-weight:800; font-size:1rem; border:none; padding:12px; margin-top:8px"},"");
+  gBtn.innerHTML = googleSVG + " Continue with Google";
+  gBtn.onclick = () => {
+    toast("Authenticating with Google...","cy");
+    setTimeout(()=>setState({view:"role_select"}), 1200);
+  };
+
+  return div("landing",
+    div("",
+      div("landing-logo mb8","Campus",el("b",{},"Connect")),
+      div("landing-tag","The gamified platform where campus ambassadors grow, compete, and get recognized — powered by AI"),
+    ),
+    div("card card-glow", {style: "max-width:380px; width: 100%; padding: 40px 24px; text-align: center; margin: 0 auto;"},
+      div("fh fw8 fs-lg mb8", "Welcome to CampusConnect"),
+      div("c2 fs-sm mb20", "Sign in to access your dashboard"),
+      gBtn
+    ),
+    div("trust-row",
+      el("span",{},"✦ ",el("b",{},"7")," ambassadors active"),
+      el("span",{},"✦ ",el("b",{},"4")," college campuses"),
+      el("span",{},"✦ ",el("b",{},"₹2.1L")," in rewards awarded"),
+    ),
+  );
+}
+
+function vRoleSelect(){
+  return div("landing",
+    div("landing-logo mb8","Choose Your",el("b",{}," Role")),
+    div("landing-tag","Are you here to participate, or to manage?"),
+    div("role-grid",
+      (()=>{const c=div("role-card",div("role-ico","🎓"),div("role-name","I'm an Ambassador"),div("role-desc","Track tasks, score GitHub, earn XP, climb the leaderboard"));c.onclick=()=>setState({view:"onboard",onboardStep:1});return c})(),
+      (()=>{const c=div("role-card org-card",div("role-ico","🏢"),div("role-name","I'm an Organization"),div("role-desc","Manage ambassadors, assign tasks, view analytics"));c.onclick=()=>setState({view:"org",orgTab:"overview"});return c})(),
+    )
+  );
+}
+
+function vOnboard(){
+  const step=S.onboardStep;
+  const dots=div("ob-dots",...[1,2,3].map(i=>div("ob-dot"+(i<=step?" on":""))));
+  let content;
+
+  if(step===1){
+    const nameInp=inp("input",{placeholder:"Your full name...",value:S.obName,onInput:e=>S.obName=e.target.value});
+    nameInp.style.textAlign="center";
+    content=[
+      div("ob-step","STEP 1 OF 3"),
+      div("ob-q mb4","What's your name?"),
+      div("ob-hint mb8","This is how you'll appear on the leaderboard"),
+      dots, nameInp,
+      el("div",{style:"margin-top:16px"},
+        btn("btn-solid btn","Continue →",()=>{if(!S.obName.trim()){toast("Enter your name first","cy");return}setState({onboardStep:2})})
+      )
+    ];
+  } else if(step===2){
+    content=[
+      div("ob-step","STEP 2 OF 3"),
+      div("ob-q mb4","Your college?"),
+      div("ob-hint mb8","We'll show it on your ambassador profile"),
+      dots,
+      div("col-grid",...COLLEGES.map(c=>{const d=div("col-opt"+(S.obCollege===c?" sel":""),c);d.onclick=()=>{S.obCollege=c;render()};return d})),
+      div("fca g8",{style:"justify-content:center"},
+        btn("btn-ghost btn","← Back",()=>setState({onboardStep:1})),
+        btn("btn-solid btn","Continue →",()=>{if(!S.obCollege){toast("Pick your college","cy");return}setState({onboardStep:3})})
+      )
+    ];
+  } else {
+    content=[
+      div("ob-step","STEP 3 OF 3"),
+      div("ob-q mb4","Pick your avatar"),
+      div("ob-hint mb8","Choose your spirit animal"),
+      dots,
+      div("av-grid",...AVATARS.map(a=>{const d=div("av-opt"+(S.obAvatar===a?" sel":""),a);d.onclick=()=>{S.obAvatar=a;render()};return d})),
+      div("fca g8",{style:"justify-content:center"},
+        btn("btn-ghost btn","← Back",()=>setState({onboardStep:2})),
+        btn("btn-solid btn","Join CampusConnect 🚀",finishOnboarding)
+      )
+    ];
+  }
+  
+  const card=div("ob-card",...content);
+  return div("ob-wrap",card);
+}
+
+function vTopbar(){
+  const lv=getLevel(S.myPts);
+  const name=S.myName||"You";
+  
+  const topbar=div("topbar",
+    el("div",{className:"brand",onclick:()=>setState({view:"landing"})},"Campus",el("b",{},"Connect")),
+    div("topbar-r",
+      S.myStreak>0?div("streak-pill","🔥 "+S.myStreak+"d"):null,
+      div("level-pill",lv.badge+" "+lv.name),
+      div("pts-badge fh fw8",S.myPts.toLocaleString()+" XP"),
+      el("button",{className:"av-btn",onclick:()=>setState({tab:"profile"})},S.myAvatar||"👤")
+    )
+  );
+  return topbar;
+}
+
+function vTabs(){
+  const tabs=[["dashboard","Dashboard"],["github","GitHub Score"],["tasks","Tasks"],["leaderboard","Leaderboard"],["badges","Badges"],["profile","Profile"]];
+  return div("tabs",...tabs.map(([k,l])=>{
+    const b=el("button",{className:"tab"+(S.tab===k?" on":""),onclick:()=>setState({tab:k})},l);
+    return b;
+  }));
+}
+
+function vDashboard(){
+  const lv=getLevel(S.myPts), nx=getNext(S.myPts);
+  const xpPct=nx?Math.round(((S.myPts-lv.min)/(nx.min-lv.min))*100):100;
+  
+  const done=S.tasks.filter(t=>t.done).length;
+  const earnedBadges=BADGES_DATA.filter(b=>b.earned).length;
+  
+  const allAmbs=[...AMBASSADORS,{id:0,pts:S.myPts}].sort((a,b)=>b.pts-a.pts);
+  const myRank=allAmbs.findIndex(a=>a.id===0)+1;
+  const doneQuests=S.dailyQuests.filter(q=>q.done).length;
+
+  // Hero card
+  const heroCard=div("hero-card",
+    div("hero-top",
+      div("",
+        div("hero-name","Hey "+( S.myName||"Ambassador")+" 👋"),
+        div("hero-sub",""+S.myCollege+" · Rank #"+myRank+" · Season 1"),
+      ),
+      div("hero-pts-wrap",
+        div("hero-pts",S.myPts.toLocaleString()),
+        div("hero-pts-sub c3","total XP")
+      )
+    ),
+    div("xp-track",div("xp-fill",{style:`width:${xpPct}%`})),
+    div("xp-labels",
+      span("",lv.badge+" "+lv.name+" ("+lv.min.toLocaleString()+" XP)"),
+      nx?span("",""+((nx.min-S.myPts).toLocaleString())+" XP to "+nx.badge+" "+nx.name):span("ccy","Max level reached!")
+    )
+  );
+
+  // Stats
+  const stats=div("sg4 mb14",
+    ...[
+      {l:"Streak",     v:"🔥 "+S.myStreak+"d", c:"var(--or)"},
+      {l:"Tasks",      v:done+"/"+S.tasks.length, c:"var(--gr)"},
+      {l:"GitHub",     v:S.myGhScore>0?S.myGhScore+"/100":"–", c:"var(--cy)"},
+      {l:"Badges",     v:earnedBadges+"/"+BADGES_DATA.length, c:"var(--pu)"},
+    ].map(s=>{
+      const c=div("sc");c.innerHTML=`<div class="sc-n fw8" style="color:${s.c}">${s.v}</div><div class="sc-l">${s.l}</div>`;return c;
+    })
+  );
+
+  // Daily Quests
+  const questsCard=div("card",
+    div("sh-hdr",div("sh-title","📅 Daily Quests"),span("fs-xs c3",doneQuests+"/"+S.dailyQuests.length+" done · Resets in 18h")),
+    div("flex",{style:"flex-direction:column;gap:8px"},
+      ...S.dailyQuests.map(q=>{
+        const row=div("dq-row"+(q.done?" done":""),
+          div("dq-ico",q.ico),
+          div("dq-info",div("dq-title",q.title),div("dq-pts","+"+q.pts+" XP")),
+          q.done?span("cgr fw7","✅ Done"):el("button",{className:"dq-cta",onclick:e=>completeQuest(q.id,q.action,e)},"Do it →")
+        );
+        return row;
+      })
+    )
+  );
+
+  // Quick actions
+  const actCard=div("card",
+    div("card-label","Quick Actions"),
+    div("fca g8 wrap",
+      btn("btn-solid btn","⭐ Analyze GitHub",()=>setState({tab:"github"})),
+      btn("btn-gr btn","📋 Browse Tasks",()=>setState({tab:"tasks"})),
+      btn("btn-pu btn","🏆 Leaderboard",()=>setState({tab:"leaderboard"})),
+    )
+  );
+
+  return div("content",heroCard,stats,questsCard,actCard);
+}
+
+function vGitHub(){
+  const inputRow=div("fca g8 mb4",
+    (()=>{
+      const i=inp("input f1",{placeholder:"Enter any GitHub username... (try: torvalds)",value:S.ghInput,
+        onInput:e=>S.ghInput=e.target.value,onKeydown:e=>e.key==="Enter"&&analyzeGitHub()});
+      return i;
+    })(),
+    btn("btn-solid btn",S.ghLoading?"Analyzing...":"Analyze →",analyzeGitHub,S.ghLoading||!S.ghInput.trim())
+  );
+
+  const introCard=div("card mb14",
+    div("fh fw8 fs-lg mb4","GitHub Profile Analyzer"),
+    div("c2 fs-sm mb14","Get a 0–100 recruiter score + AI analysis on any GitHub profile. Earn up to 200 XP."),
+    inputRow,
+    S.ghError?div("c2 fs-sm mt8",{style:"color:var(--re)"},S.ghError):null,
+  );
+
+  if(!S.ghResult) return div("content",introCard);
+
+  const r=S.ghResult;
+  const sc=r.score>=90?"var(--gr)":r.score>=70?"var(--cy)":r.score>=50?"var(--go)":r.score>=30?"var(--or)":"var(--re)";
+  const verdict=r.score>=90?"Exceptional profile":r.score>=70?"Strong profile ✅":r.score>=50?"Needs improvement":r.score>=30?"Needs significant work":"Weak profile";
+  const vclass=r.score>=90?"v-90":r.score>=70?"v-70":r.score>=50?"v-50":r.score>=30?"v-30":"v-0";
+
+  // Score ring + profile info
+  const topCard=div("card card-glow mb14",
+    div("gh-result-top",
+      Ring(r.score,110,sc),
+      div("f1 mn0",
+        div("gh-name",r.user.name||r.user.login),
+        div("gh-meta",
+          span("",r.user.public_repos+" repos"),
+          span("",r.user.followers+" followers"),
+          span("",r.stars+" total stars"),
+          r.user.location?span("",r.user.location):null,
+        ),
+        div("gh-verdict "+vclass+" mb8",verdict),
+        r.score>=70?div("fca g8 wrap",
+          div("fs-xs",{style:"background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--gr);padding:3px 10px;border-radius:999px;font-weight:700"},"✅ Recruiter-Ready")
+        ):null
+      )
+    )
+  );
+
+  // Score breakdown
+  const bkNames=["Profile completeness","Repository quality","Recent activity","Community reach","Personal branding"];
+  const bkVals=[r.breakdown.profile,r.breakdown.repos,r.breakdown.activity,r.breakdown.community,r.breakdown.branding];
+  const bkMax=[25,25,20,15,15];
+  const bkColors=["var(--cy)","var(--pu)","var(--gr)","var(--go)","var(--or)"];
+
+  const bkCard=div("card mb14",
+    div("card-label","Score Breakdown"),
+    ...bkNames.map((n,i)=>{
+      const pct=Math.round((bkVals[i]/bkMax[i])*100);
+      return div("bk-row",
+        div("bk-label c2",n),
+        div("bk-track",div("bk-fill",{style:`width:${pct}%;background:${bkColors[i]}`})),
+        div("bk-num",{style:`color:${bkColors[i]}`},bkVals[i]+"/"+bkMax[i])
+      );
+    })
+  );
+
+  // Good / Improve
+  const twoCol=div("sg2 mb14",
+    div("card",
+      div("card-label",{style:"color:var(--gr)"},"What's Working ✅"),
+      el("ul",{className:"in-list"},
+        r.good.length===0?el("li",{className:"in-item"},"–"):null,
+        ...r.good.map(g=>el("li",{className:"in-item"},
+          el("span",{className:"in-ico cgr"},"✅"),g
+        ))
+      )
+    ),
+    div("card",
+      div("card-label",{style:"color:var(--re)"},"To Improve 🔺"),
+      el("ul",{className:"in-list"},
+        r.imp.length===0?el("li",{className:"in-item"},"Excellent!"):null,
+        ...r.imp.map(g=>el("li",{className:"in-item"},
+          el("span",{className:"in-ico cor"},"🔺"),g
+        ))
+      )
+    )
+  );
+
+  // AI analysis
+  const aiCard=div("ai-box",
+    div("ai-lbl","✨ AI Recruiter Analysis (powered by Claude)"),
+    S.aiLoading?div("ai-txt","Generating recruiter insights from Claude AI..."):
+    S.aiText?div("ai-txt",S.aiText):
+    div("ai-txt c3","Analysis loading...")
+  );
+
+  return div("content",introCard,topCard,bkCard,twoCol,aiCard);
+}
+
+function vTasks(){
+  const cats=["All",...new Set(S.tasks.map(t=>t.cat))];
+  const shown=S.taskFilter==="All"?S.tasks:S.tasks.filter(t=>t.cat===S.taskFilter);
+  const done=S.tasks.filter(t=>t.done).length;
+  const earned=S.tasks.filter(t=>t.done).reduce((s,t)=>s+t.pts,0);
+  const pct=Math.round((done/S.tasks.length)*100);
+
+  const progCard=div("card mb4",
+    div("fb mb8",
+      div("",div("fh fw8 fs-lg mb4",done+"/"+S.tasks.length+" tasks done"),div("fs-xs c2",earned+" XP earned from tasks")),
+      div("",{style:"width:140px;text-align:right"},
+        div("prog-track",div("prog-fill",{style:`width:${pct}%`})),
+        div("fs-xs c3 mt6",pct+"%")
+      )
+    )
+  );
+
+  const filters=div("fp-row",...cats.map(c=>{
+    const b=el("button",{className:"fp"+(S.taskFilter===c?" on":""),onclick:()=>setState({taskFilter:c})},c);
+    return b;
+  }));
+
+  const rows=shown.map(t=>{
+    const row=div("task-card"+(t.done?" done":""),
+      div("task-ico-box",t.ico),
+      div("task-info mn0",
+        div("task-title",t.title),
+        div("task-desc c2",t.desc),
+        div("task-meta",div("cat-tag ct-"+t.cat,t.cat))
+      ),
+      div("task-side",
+        div("task-pts","+"+t.pts+" XP"),
+        t.done?span("cgr fw7 fs-xs","✅ Completed"):btnS("btn-gr btn","padding:6px 14px;font-size:.8rem","Submit Proof",e=>completeTask(t.id,e))
+      )
+    );
+    return row;
+  });
+
+  return div("content",progCard,filters,...rows);
+}
+
+function vLeaderboard(){
+  const allAmbs=[
+    ...AMBASSADORS,
+    {id:0,name:S.myName||"You",college:S.myCollege||"Your College",pts:S.myPts,streak:S.myStreak,ghScore:S.myGhScore,initials:(S.myName&&S.myName.length>=2?S.myName.slice(0,2).toUpperCase():"ME"),av:"#4f46e5"}
+  ].sort((a,b)=>b.pts-a.pts).map((a,i)=>({...a,rank:i+1}));
+
+  const top3=allAmbs.slice(0,3);
+  const rest=allAmbs.slice(3);
+
+  // Podium — always show 2nd, 1st, 3rd order
+  const podOrder=[top3[1],top3[0],top3[2]];
+  const podAvClasses=["pod-av pod-av-2","pod-av pod-av-1","pod-av pod-av-3"];
+  const podBarClasses=["pod-bar pod-bar-2","pod-bar pod-bar-1","pod-bar pod-bar-3"];
+  const podRankDisplay=["🥈","🏆","🥉"];
+
+  const podium=div("podium",
+    ...podOrder.map((a,i)=>{
+      if(!a)return div("");
+      return div("pod-slot",
+        div("pod-av-wrap",div(podAvClasses[i],a.initials)),
+        div(podBarClasses[i],div("pod-rank",podRankDisplay[i])),
+        div("pod-name",a.name),
+        div("pod-pts fs-xs c2",a.pts.toLocaleString()+" XP")
+      );
+    })
+  );
+
+  const headerCard=div("card mb14",
+    div("fb",
+      div("",div("sh-title mb4","Program Leaderboard"),div("fs-xs c2","Your rank updates live as you earn XP")),
+    )
+  );
+
+  const lbRows=[...rest].map(a=>{
+    return div("lb-row"+(a.id===0?" me":""),
+      div("lb-rank c2","#"+a.rank),
+      div("lb-av",{style:"background:"+a.av},a.initials),
+      div("lb-info",
+        div("lb-name"+(a.id===0?" ccy":""),a.name+(a.id===0?" (You)":"")),
+        div("lb-college c2",a.college)
+      ),
+      div("lb-right",
+        div("lb-pts",a.pts.toLocaleString()),
+        div("lb-streak c2","🔥"+a.streak+"d streak")
+      )
+    );
+  });
+
+  return div("content",headerCard,div("card card-glow mb14",podium),...lbRows.map(r=>div("",r)));
+}
+
+function vBadges(){
+  const earned=BADGES_DATA.filter(b=>b.earned).length;
+  const hdr=div("card mb14",
+    div("fh fw8 fs-lg mb4",earned+"/"+BADGES_DATA.length+" Badges Earned"),
+    div("fs-sm c2","Complete tasks and analyze GitHub profiles to unlock badges and bonus XP")
+  );
+
+  const grid=div("badge-grid",
+    ...BADGES_DATA.map(b=>div("badge-card"+(b.earned?" earned":"")+(b.earned?"":" badge-locked"),
+      div("badge-ico",b.ico),
+      div("badge-name",b.name),
+      div("badge-desc c2",b.desc),
+      b.earned?div("badge-pts","+"+b.pts+" XP bonus"):null,
+      b.earned?div("badge-check","✅ Earned"):null,
+    ))
+  );
+  return div("content",hdr,grid);
+}
+
+function vProfile(){
+  const lv=getLevel(S.myPts);
+  const done=S.tasks.filter(t=>t.done).length;
+  const allAmbs=[...AMBASSADORS,{id:0,pts:S.myPts}].sort((a,b)=>b.pts-a.pts);
+  const myRank=allAmbs.findIndex(a=>a.id===0)+1;
+  const earned=BADGES_DATA.filter(b=>b.earned).length;
+
+  const profileCard=div("card card-glow mb14",
+    div("fca g16 mb14 wrap",
+      div("",{style:"width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--pu));display:flex;align-items:center;justify-content:center;font-size:2.2rem;flex-shrink:0"},S.myAvatar||"👤"),
+      div("f1",
+        div("fh fw8",{style:"font-size:1.3rem;margin-bottom:4px"},S.myName||"Ambassador"),
+        div("fs-sm c2",S.myCollege||"Your College"),
+        div("fca g8 mt6",
+          div("level-pill fca g4",{style:"display:inline-flex"},lv.badge+" "+lv.name),
+          div("fs-xs c3","Joined Season 1")
+        )
+      )
+    ),
+    div("sg4",
+      ...[
+        {l:"Total XP",v:S.myPts.toLocaleString(),c:"var(--cy)"},
+        {l:"Rank",v:"#"+myRank,c:"var(--go)"},
+        {l:"Streak",v:"🔥 "+S.myStreak+"d",c:"var(--or)"},
+        {l:"Badges",v:earned+"/"+BADGES_DATA.length,c:"var(--pu)"},
+      ].map(s=>{const c=div("sc");c.innerHTML=`<div class="sc-n fw8" style="color:${s.c}">${s.v}</div><div class="sc-l">${s.l}</div>`;return c;})
+    )
+  );
+
+  const tasksCard=div("card mb14",
+    div("card-label","Task Progress"),
+    div("fb mb8",div("fs-sm fw7",done+"/"+S.tasks.length+" completed"),div("fs-xs c2",S.tasks.filter(t=>t.done).reduce((s,t)=>s+t.pts,0)+" XP earned")),
+    div("prog-track",div("prog-fill",{style:`width:${Math.round((done/S.tasks.length)*100)}%`}))
+  );
+
+  const ghCard=div("card",
+    div("card-label","GitHub Score"),
+    S.myGhScore>0?
+      div("fca g12",Ring(S.myGhScore,80,S.myGhScore>=70?"var(--gr)":S.myGhScore>=50?"var(--go)":"var(--re)"),
+        div("",div("fh fw8 fs-lg ccy mb4",S.myGhScore+"/100"),div("fs-sm c2",S.myGhScore>=70?"Recruiter-ready profile":"Keep improving your GitHub"),btnS("btn-cy btn","margin-top:10px;padding:6px 14px;font-size:.8rem","Re-analyze",()=>setState({tab:"github"})))
+      ):
+      div("fs-sm c2","Analyze your GitHub profile to see your score",div("mt8",btnS("btn-cy btn","font-size:.85rem","Analyze GitHub →",()=>setState({tab:"github"}))))
+  );
+
+  return div("content",profileCard,tasksCard,ghCard);
+}
+
+function vOrg(){
+  const tabs=[["overview","Overview"],["ambassadors","Ambassadors"],["tasks","Tasks"]];
+  const done=S.tasks.filter(t=>t.done).length;
+  
+  const topbar=div("org-topbar",
+    el("div",{className:"brand",onclick:()=>setState({view:"landing"})},"Campus",el("b",{},"Connect")),
+    div("fca g8",div("org-badge","Organization"),div("av-btn",{style:"border:none;cursor:default"},"🏢"))
+  );
+  const tabBar=div("tabs",...tabs.map(([k,l])=>{
+    const b=el("button",{className:"tab"+(S.orgTab===k?" on":""),onclick:()=>setState({orgTab:k})},l);
+    return b;
+  }));
+  
+  let tabContent;
+  if(S.orgTab==="overview"){
+    const kpis=div("org-kpi-grid",
+      ...[
+        {l:"Total Ambassadors",v:"7",c:"var(--cy)"},
+        {l:"Active This Week",v:"5",c:"var(--gr)"},
+        {l:"Tasks Completed",v:done+"/"+S.tasks.length,c:"var(--go)"},
+        {l:"Avg GitHub Score",v:"67",c:"var(--pu)"},
+      ].map(s=>{const c=div("org-kpi");c.innerHTML=`<div class="org-kpi-n" style="color:${s.c}">${s.v}</div><div class="org-kpi-l">${s.l}</div>`;return c;})
+    );
+    const topCard=div("card",
+      div("card-label","Top Performers"),
+      ...AMBASSADORS.slice(0,3).map((a,i)=>div("fca g12",{style:`padding:10px 0;border-bottom:${i<2?"1px solid var(--b)":"none"}`},
+        span("",{style:"font-size:1.1rem"},["🏆","🥈","🥉"][i]),
+        div("lb-av",{style:"background:"+a.av},a.initials),
+        div("f1",div("fs-sm fw7",a.name),div("fs-xs c2",a.college)),
+        div("",{style:"text-align:right"},div("fh fw8 ccy fs-sm",a.pts.toLocaleString()+" XP"),div("fs-xs c2","GH: "+a.ghScore+"/100"))
+      ))
+    );
+    tabContent=div("content",kpis,topCard);
+  } else if(S.orgTab==="ambassadors"){
+    const rows=AMBASSADORS.map((a,i)=>div("fca g12",{style:`padding:12px 0;border-bottom:${i<AMBASSADORS.length-1?"1px solid var(--b)":"none"}`},
+      div("lb-av",{style:"background:"+a.av},a.initials),
+      div("f1 mn0",div("fs-sm fw7",a.name),div("fs-xs c2",a.college)),
+      div("",{style:"text-align:right"},div("fh fw8 ccy",a.pts.toLocaleString()+" XP"),div("fs-xs c2","GH: "+a.ghScore+"/100 · 🔥"+a.streak+"d"))
+    ));
+    tabContent=div("content",div("card",div("card-label","All Ambassadors ("+AMBASSADORS.length+")"), ...rows));
+  } else {
+    const taskRows=S.tasks.map((t,i)=>div("fca g12",{style:`padding:10px 0;border-bottom:${i<S.tasks.length-1?"1px solid var(--b)":"none"}`},
+      div("task-ico-box",{style:"width:36px;height:36px;border-radius:8px;font-size:1rem"},t.ico),
+      div("f1 mn0",div("fs-sm fw7",t.title),div("cat-tag ct-"+t.cat,{style:"display:inline-block;margin-top:4px"},t.cat)),
+      div("",{style:"text-align:right"},div("cgr fw7 fs-sm","+"+t.pts+" XP"),div("fs-xs",{style:`color:${t.done?"var(--gr)":"var(--t2)"}`},t.done?"✅ Done":"Active"))
+    ));
+    tabContent=div("content",div("card",div("card-label","All Tasks ("+S.tasks.length+")"), ...taskRows));
+  }
+  
+  const wrapper=div("");
+  wrapper.appendChild(topbar);
+  wrapper.appendChild(tabBar);
+  wrapper.appendChild(tabContent);
+  return wrapper;
+}
+
+// ═══════════════════════════════════════
+//  MAIN RENDER
+// ═══════════════════════════════════════
+function render(){
+  const app=document.getElementById("app");
+  app.innerHTML="";
+
+  if(S.view==="landing"){ app.appendChild(vLanding()); return }
+  if(S.view==="role_select"){ app.appendChild(vRoleSelect()); return }
+  if(S.view==="onboard"){ app.appendChild(vOnboard()); return }
+  if(S.view==="org"){ app.appendChild(vOrg()); return }
+
+  // Ambassador view
+  const wrap=div("");
+  wrap.appendChild(vTopbar());
+  wrap.appendChild(vTabs());
+
+  if(S.tab==="dashboard")   wrap.appendChild(vDashboard());
+  else if(S.tab==="github") wrap.appendChild(vGitHub());
+  else if(S.tab==="tasks")  wrap.appendChild(vTasks());
+  else if(S.tab==="leaderboard") wrap.appendChild(vLeaderboard());
+  else if(S.tab==="badges") wrap.appendChild(vBadges());
+  else if(S.tab==="profile") wrap.appendChild(vProfile());
+
+  app.appendChild(wrap);
+}
+
+render();
+</script>
+</body>
+</html>
