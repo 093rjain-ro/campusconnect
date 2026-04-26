@@ -8,7 +8,7 @@
 ## 📺 Demo Video
 > **Note:** Watch the demo video below to see the platform in action!
 <!-- REPLACE_WITH_VIDEO_LINK_OR_GIF -->
-[Link to Video / Embed Video Here]
+Link to Video - https://github.com/093rjain-ro/campusconnect/issues/1
 
 ---
 
