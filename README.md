@@ -44,4 +44,16 @@ Since the application is a standalone prototype, running it is incredibly simple
 
 ## 📸 Screenshots
 
+<p align="center">
+  <img src="assets/screenshot5.png" alt="Landing Page & Login" width="800"/>
+  <br/><br/>
+  <img src="assets/screenshot4.png" alt="Dashboard & Quests" width="800"/>
+  <br/><br/>
+  <img src="assets/screenshot3.png" alt="Badges & Achievements" width="800"/>
+  <br/><br/>
+  <img src="assets/screenshot2.png" alt="Profile Overview" width="800"/>
+  <br/><br/>
+  <img src="assets/screenshot1.png" alt="Tasks & XP" width="800"/>
+</p>
+
 *Hackathon Submission by Rohan Jain*
