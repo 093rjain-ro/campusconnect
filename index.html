@@ -263,6 +263,8 @@ select.input{cursor:pointer}
 .sh-title{font-family:var(--fh);font-size:1.05rem;font-weight:800}
 .tac{text-align:center}
 
+.proj-card{display:flex;flex-direction:column;height:100%}
+
 @media(max-width:640px){
   .sg4{grid-template-columns:repeat(2,1fr)}
   .sg2{grid-template-columns:1fr}
@@ -338,6 +340,41 @@ const BADGES_DATA=[
   {name:"Content Creator",desc:"Submit 3 content pieces",        earned:false,ico:"🎬",pts:250},
   {name:"Top 10",         desc:"Reach leaderboard top 10",       earned:true, ico:"🏆",pts:100},
   {name:"Legend",         desc:"Reach 5000 total XP",            earned:false,ico:"👑",pts:1000},
+];
+
+const PROJECTS=[
+  {
+    tag: "Hackathon, AICore Connect",
+    title: "CampusConnect",
+    users: "Ambassadors, Organizations",
+    features: "XP, levels and daily quests; AI GitHub profile analyzer; live leaderboard and badges; role-based dashboards",
+    chips: ["HTML5", "CSS3", "Vanilla JS", "GitHub Public API"],
+    status: "Working prototype with demo video and screenshots"
+  },
+  {
+    tag: "Academic, DBMS Project 22",
+    title: "Campus Placement & Recruitment Drive Management System",
+    subtitle: "A database design that keeps one correct record from student registration up to final offer, replacing the scattered sheets, forms and messages used by placement cells.",
+    problem: "ineligible students may get included by mistake; the same student can appear more than once for a drive; round results and offer status drift out of sync.",
+    usersList: [
+      "Placement officer: create drives, set eligibility, enter results, issue offers",
+      "Student: view drives, apply, track status",
+      "Recruiter: check applicants, review shortlists, confirm selections",
+      "Admin: manage access, maintain master data, support reports"
+    ],
+    functions: [
+      "Master data: student, department, skill, company and job details",
+      "Drive processing: create drives, check eligibility, allow one valid application per student per drive",
+      "Results and reporting: store round results, issue offers, generate shortlist and placement reports"
+    ],
+    flow: "Student data -> Drive setup -> Eligibility check (CGPA, marks, backlogs, skills) -> Application -> Rounds and offer (aptitude, technical, HR)",
+    entities: "Department, Student, AcademicRecord, Skill, StudentSkill, Company, JobProfile, Drive, EligibilityCriteria, Application, Round, RoundResult, Offer (13)",
+    relations: "one department has many students; student-skill is many-to-many through StudentSkill; one company has many job profiles and drives; one drive has many applications, rounds and offers; Application links Student and Drive; RoundResult links Round and Student; Offer is given only after the student clears the process",
+    rules: "one application per student per drive; only eligible students may apply; CGPA and marks stay in a valid range; rounds stored in proper order",
+    whyRules: "prevent duplicate data, reduce human error, make reports reliable, improve fairness",
+    next: "normalize to 3NF, write DDL and constraints, insert sample data, build a small front end",
+    status: "Review 1 complete (problem, scope, users, functions, ER diagram, initial relational schema)"
+  }
 ];
 
 // ═══════════════════════════════════════
@@ -771,7 +808,7 @@ function vTopbar(){
 }
 
 function vTabs(){
-  const tabs=[["dashboard","Dashboard"],["github","GitHub Score"],["tasks","Tasks"],["leaderboard","Leaderboard"],["badges","Badges"],["profile","Profile"]];
+  const tabs=[["dashboard","Dashboard"],["github","GitHub Score"],["tasks","Tasks"],["leaderboard","Leaderboard"],["badges","Badges"],["projects","Projects"],["profile","Profile"]];
   return div("tabs",...tabs.map(([k,l])=>{
     const b=el("button",{className:"tab"+(S.tab===k?" on":""),onclick:()=>setState({tab:k})},l);
     return b;
@@ -1054,6 +1091,40 @@ function vBadges(){
   return div("content",hdr,grid);
 }
 
+function vProjects(){
+  const hdr=div("card mb14",
+    div("fh fw8 fs-lg mb4","Projects"),
+    div("fs-sm c2","A showcase of projects featured in this repository")
+  );
+
+  const projCards = PROJECTS.map(p => {
+    return div("card card-glow mb14 proj-card",
+      div("cat-tag mb8", {style:"display:inline-block;background:var(--cy10);color:var(--cy)"}, p.tag),
+      div("fh fw8 mb4", {style:"font-size:1.4rem;color:var(--t)"}, p.title),
+      p.subtitle ? div("c2 fs-sm mb14", p.subtitle) : null,
+      p.users ? div("mb8", el("b", {className:"c3 fs-sm"}, "Users: "), span("c2 fs-sm", p.users)) : null,
+      p.problem ? div("mb8", el("b", {className:"c3 fs-sm"}, "Problem: "), span("c2 fs-sm", p.problem)) : null,
+      p.features ? div("mb8", el("b", {className:"c3 fs-sm"}, "Features: "), span("c2 fs-sm", p.features)) : null,
+      p.usersList ? div("mb8", el("b", {className:"c3 fs-sm"}, "Users: "), el("ul", {className:"in-list", style:"margin-left:8px"}, ...p.usersList.map(u => el("li", {className:"in-item"}, el("span", {className:"in-ico ccy"}, "✦"), u)))) : null,
+      p.functions ? div("mb8", el("b", {className:"c3 fs-sm"}, "Main Functions: "), el("ul", {className:"in-list", style:"margin-left:8px"}, ...p.functions.map(f => el("li", {className:"in-item"}, el("span", {className:"in-ico ccy"}, "✦"), f)))) : null,
+      p.flow ? div("mb8", el("b", {className:"c3 fs-sm"}, "Process Flow: "), span("c2 fs-sm", p.flow)) : null,
+      p.entities ? div("mb8", el("b", {className:"c3 fs-sm"}, "Entities: "), span("c2 fs-sm", p.entities)) : null,
+      p.relations ? div("mb8", el("b", {className:"c3 fs-sm"}, "Key Relationships: "), span("c2 fs-sm", p.relations)) : null,
+      p.rules ? div("mb8", el("b", {className:"c3 fs-sm"}, "Key Rules (Review 2): "), span("c2 fs-sm", p.rules)) : null,
+      p.whyRules ? div("mb8", el("b", {className:"c3 fs-sm"}, "Why Rules Matter: "), span("c2 fs-sm", p.whyRules)) : null,
+      p.next ? div("mb8", el("b", {className:"c3 fs-sm"}, "Next Steps: "), span("c2 fs-sm", p.next)) : null,
+      p.chips ? div("fca g8 wrap mb12 mt8", ...p.chips.map(c => div("fp on", {style:"cursor:default;padding:4px 10px;font-size:0.7rem"}, c))) : null,
+      div("mt12 pt12", {style:"border-top:1px solid var(--b);padding-top:12px;margin-top:auto"},
+        el("b", {className:"c3 fs-sm"}, "Status: "), span("ccy fs-sm fw7", p.status)
+      )
+    );
+  });
+  
+  const grid = div("sg2", ...projCards);
+  
+  return div("content", hdr, grid);
+}
+
 function vProfile(){
   const lv=getLevel(S.myPts);
   const done=S.tasks.filter(t=>t.done).length;
@@ -1179,6 +1250,7 @@ function render(){
   else if(S.tab==="tasks")  wrap.appendChild(vTasks());
   else if(S.tab==="leaderboard") wrap.appendChild(vLeaderboard());
   else if(S.tab==="badges") wrap.appendChild(vBadges());
+  else if(S.tab==="projects") wrap.appendChild(vProjects());
   else if(S.tab==="profile") wrap.appendChild(vProfile());
 
   app.appendChild(wrap);
