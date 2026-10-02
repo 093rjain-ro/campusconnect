@@ -736,10 +736,13 @@ function vLanding(){
 function vRoleSelect(){
   return div("landing",
     div("landing-logo mb8","Choose Your",el("b",{}," Role")),
-    div("landing-tag","Are you here to participate, or to manage?"),
-    div("role-grid",
-      (()=>{const c=div("role-card",div("role-ico","🎓"),div("role-name","I'm an Ambassador"),div("role-desc","Track tasks, score GitHub, earn XP, climb the leaderboard"));c.onclick=()=>setState({view:"onboard",onboardStep:1});return c})(),
-      (()=>{const c=div("role-card org-card",div("role-ico","🏢"),div("role-name","I'm an Organization"),div("role-desc","Manage ambassadors, assign tasks, view analytics"));c.onclick=()=>setState({view:"org",orgTab:"overview"});return c})(),
+    div("landing-tag","Select your profile to access the appropriate dashboard."),
+    div("role-grid", {style: "max-width: 800px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));"},
+      (()=>{const c=div("role-card",div("role-ico","🎓"),div("role-name","Ambassador / Student"),div("role-desc","Track tasks, score GitHub, earn XP, apply for drives"));c.onclick=()=>setState({view:"onboard",onboardStep:1});return c})(),
+      (()=>{const c=div("role-card org-card",div("role-ico","🏢"),div("role-name","Organization"),div("role-desc","Manage ambassadors, assign tasks, view analytics"));c.onclick=()=>setState({view:"org",orgTab:"overview"});return c})(),
+      (()=>{const c=div("role-card", {style: "background: linear-gradient(135deg, rgba(251,191,36,.03), transparent);"}, div("role-ico","👔"),div("role-name","Recruiter"),div("role-desc","Check applicants, Review shortlists, Confirm selections"));c.onclick=()=>setState({view:"recruiter"});return c})(),
+      (()=>{const c=div("role-card", {style: "background: linear-gradient(135deg, rgba(16,185,129,.03), transparent);"}, div("role-ico","📊"),div("role-name","Placement Officer"),div("role-desc","Create drives, Set eligibility, Enter results, Issue offers"));c.onclick=()=>setState({view:"officer"});return c})(),
+      (()=>{const c=div("role-card", {style: "background: linear-gradient(135deg, rgba(249,115,22,.03), transparent);"}, div("role-ico","⚙️"),div("role-name","Admin"),div("role-desc","Manage access, Maintain master data, Support reports"));c.onclick=()=>setState({view:"admin"});return c})()
     )
   );
 }
@@ -1228,6 +1231,88 @@ function vOrg(){
   return wrapper;
 }
 
+function vRecruiter(){
+  const topbar=div("org-topbar",
+    el("div",{className:"brand",onclick:()=>setState({view:"landing"})},"DBMS",el("b",{},"Project22")),
+    div("fca g8",div("org-badge","Recruiter"),div("av-btn",{style:"border:none;cursor:default"},"👔"))
+  );
+  const content=div("content",
+    div("card card-glow mb14",
+      div("fh fw8 fs-lg mb4","Recruiter Dashboard"),
+      div("fs-sm c2 mb14","Check applicants, review shortlists, and confirm selections for your active drives."),
+      div("sg4",
+        ...[
+          {l:"Applicants",v:"142",c:"var(--cy)"},
+          {l:"Shortlisted",v:"35",c:"var(--go)"},
+          {l:"Interviews",v:"12",c:"var(--or)"},
+          {l:"Selected",v:"8",c:"var(--gr)"}
+        ].map(s=>{const c=div("sc");c.innerHTML=`<div class="sc-n fw8" style="color:${s.c}">${s.v}</div><div class="sc-l">${s.l}</div>`;return c;})
+      )
+    ),
+    div("sg3",
+      div("card", div("card-label","Check Applicants"), div("fs-sm c2","View student profiles, CGPA, skills, and past academic records.")),
+      div("card", div("card-label","Review Shortlists"), div("fs-sm c2","Approve or reject candidates for the next interview rounds.")),
+      div("card", div("card-label","Confirm Selections"), div("fs-sm c2","Finalize the selected candidates to be issued offers."))
+    )
+  );
+  return div("",topbar,content);
+}
+
+function vOfficer(){
+  const topbar=div("org-topbar",
+    el("div",{className:"brand",onclick:()=>setState({view:"landing"})},"DBMS",el("b",{},"Project22")),
+    div("fca g8",div("org-badge","Placement Officer"),div("av-btn",{style:"border:none;cursor:default"},"📊"))
+  );
+  const content=div("content",
+    div("card card-glow mb14",
+      div("fh fw8 fs-lg mb4","Placement Officer Dashboard"),
+      div("fs-sm c2 mb14","Create recruitment drives, check eligibility, and issue offers to students."),
+      div("sg4",
+        ...[
+          {l:"Active Drives",v:"4",c:"var(--cy)"},
+          {l:"Pending Results",v:"12",c:"var(--or)"},
+          {l:"Offers Issued",v:"85",c:"var(--gr)"},
+          {l:"Eligible Students",v:"420",c:"var(--pu)"}
+        ].map(s=>{const c=div("sc");c.innerHTML=`<div class="sc-n fw8" style="color:${s.c}">${s.v}</div><div class="sc-l">${s.l}</div>`;return c;})
+      )
+    ),
+    div("sg2",
+      div("card", div("card-label","Create Drives"), div("fs-sm c2","Set up new company drives, job profiles, and define eligibility criteria (CGPA, backlogs, skills).")),
+      div("card", div("card-label","Set Eligibility"), div("fs-sm c2","System automatically checks EligibilityCriteria against Student AcademicRecord & StudentSkill.")),
+      div("card", div("card-label","Enter Results"), div("fs-sm c2","Store and update RoundResult for aptitude, technical, and HR rounds sequentially.")),
+      div("card", div("card-label","Issue Offers"), div("fs-sm c2","Generate placement reports and issue final Offer letters to students who clear the process."))
+    )
+  );
+  return div("",topbar,content);
+}
+
+function vAdmin(){
+  const topbar=div("org-topbar",
+    el("div",{className:"brand",onclick:()=>setState({view:"landing"})},"DBMS",el("b",{},"Project22")),
+    div("fca g8",div("org-badge","Admin"),div("av-btn",{style:"border:none;cursor:default"},"⚙️"))
+  );
+  const content=div("content",
+    div("card card-glow mb14",
+      div("fh fw8 fs-lg mb4","System Admin Dashboard"),
+      div("fs-sm c2 mb14","Manage user access, maintain master data, and support reports for the DBMS Project 22."),
+      div("sg4",
+        ...[
+          {l:"Total Students",v:"850",c:"var(--cy)"},
+          {l:"Companies",v:"45",c:"var(--pu)"},
+          {l:"Departments",v:"6",c:"var(--go)"},
+          {l:"System Health",v:"100%",c:"var(--gr)"}
+        ].map(s=>{const c=div("sc");c.innerHTML=`<div class="sc-n fw8" style="color:${s.c}">${s.v}</div><div class="sc-l">${s.l}</div>`;return c;})
+      )
+    ),
+    div("sg3",
+      div("card", div("card-label","Manage Access"), div("fs-sm c2","Control role-based access for Placement Officers, Recruiters, and Students.")),
+      div("card", div("card-label","Maintain Master Data"), div("fs-sm c2","Manage Department, Skill, Company, and basic Student entities.")),
+      div("card", div("card-label","Support Reports"), div("fs-sm c2","Generate master data reports, analytics, and ensure data integrity rules."))
+    )
+  );
+  return div("",topbar,content);
+}
+
 // ═══════════════════════════════════════
 //  MAIN RENDER
 // ═══════════════════════════════════════
@@ -1239,6 +1324,9 @@ function render(){
   if(S.view==="role_select"){ app.appendChild(vRoleSelect()); return }
   if(S.view==="onboard"){ app.appendChild(vOnboard()); return }
   if(S.view==="org"){ app.appendChild(vOrg()); return }
+  if(S.view==="recruiter"){ app.appendChild(vRecruiter()); return }
+  if(S.view==="officer"){ app.appendChild(vOfficer()); return }
+  if(S.view==="admin"){ app.appendChild(vAdmin()); return }
 
   // Ambassador view
   const wrap=div("");
