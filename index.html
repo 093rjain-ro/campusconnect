@@ -60,7 +60,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .col-opt:hover{border-color:var(--ba);background:var(--cy10)}
 .col-opt.sel{border-color:var(--cy);background:var(--cy10);color:var(--cy);font-weight:700}
 
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:rgba(6,8,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100}
+.topbar,.org-topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:rgba(6,8,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100}
+.org-badge{padding:5px 14px;background:var(--s2);border:1px solid var(--bap);border-radius:999px;font-size:.78rem;font-weight:700;color:var(--pu)}
 .brand{font-family:var(--fh);font-size:1.3rem;font-weight:900;letter-spacing:-.03em;cursor:pointer}
 .brand b{background:linear-gradient(135deg,var(--cy),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .topbar-r{display:flex;align-items:center;gap:10px}
