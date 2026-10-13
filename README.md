@@ -1,7 +1,33 @@
 # CampusConnect 🚀
 *The Gamified Platform Where Campus Ambassadors Grow, Compete, and Get Recognized.*
 
-**Built for the AICore Connect Hackathon**
+**Built for the AICore Connect Hackathon & DBMS Project 22**
+
+[![Live Demo](https://img.shields.io/badge/Live%20Website-Open%20Directly%20in%20Browser-00d4ff?style=for-the-badge&logo=googlechrome)](https://093rjain-ro.github.io/campusconnect/)
+[![Presentation](https://img.shields.io/badge/Project%2022%20PPT-Download%20PPTX-8b5cf6?style=for-the-badge&logo=microsoftpowerpoint)](./Project_22_Campus_Placement_System.pptx)
+[![Markdown Slides](https://img.shields.io/badge/Presentation%20Doc-View%20Markdown-10b981?style=for-the-badge&logo=markdown)](./PROJECT_22_PRESENTATION.md)
+
+---
+
+## 🌐 Direct Live Website Access (GitHub Pages)
+
+You can launch and use the website directly from this repository without installing anything:
+
+👉 **[Launch Website Directly: https://093rjain-ro.github.io/campusconnect/](https://093rjain-ro.github.io/campusconnect/)**
+
+> **How to ensure GitHub Pages is enabled on this repo:**
+> 1. Go to your repository settings: **Settings ➔ Pages** (`https://github.com/093rjain-ro/campusconnect/settings/pages`).
+> 2. Under **Build and deployment** ➔ **Source**, select **Deploy from a branch**.
+> 3. Select Branch: **`main`** and Folder: **`/ (root)`**, then click **Save**.
+> 4. GitHub will deploy the site live at `https://093rjain-ro.github.io/campusconnect/`.
+
+---
+
+## 📊 Project 22 Presentation & Slide Deck
+The complete 12-slide presentation for **DBMS Project 22** is included directly in this repository:
+- **Download PowerPoint Presentation:** [`Project_22_Campus_Placement_System.pptx`](./Project_22_Campus_Placement_System.pptx)
+- **Read Presentation Document with Diagrams:** [`PROJECT_22_PRESENTATION.md`](./PROJECT_22_PRESENTATION.md)
+- **Interactive In-App Slide Viewer:** Open the website and click on the **Project 22 PPT 📊** tab to navigate the 12 slides interactively.
 
 ---
 
@@ -32,15 +58,35 @@ It provides an end-to-end experience where:
 - **APIs**: GitHub Public API for profile analysis.
 - **Design Aesthetic**: Glassmorphism, tailored dark mode, smooth gradient animations.
 
-## 🚀 How to Run Locally
-Since the application is a standalone prototype, running it is incredibly simple:
-1. Clone the repository.
-2. Open `index.html` in any modern web browser.
-3. *Alternatively*, run it with a local server:
-   ```bash
-   npx http-server -p 8080
-   ```
-4. Navigate to `http://localhost:8080`.
+## 🚀 How to Run Locally with SQLite Database
+
+The platform uses a SQLite database located in the `.db/` directory (`.db/campusconnect.db`). Every time you add information or take actions in the app, it automatically updates this database file.
+
+### 1. Start the Live Server
+You can launch the backend server with one click:
+- **Windows Double-Click**: Double-click `start.bat`
+- **Or via Python**:
+  ```bash
+  python server.py
+  ```
+- **Or via Node.js**:
+  ```bash
+  node server.js
+  ```
+The app will open at `http://localhost:5000`.
+
+### 2. Inspect Live Data in DB Browser for SQLite
+1. Open **DB Browser for SQLite** (download from [sqlitebrowser.org](https://sqlitebrowser.org/)).
+2. Click **Open Database** and select `.db/campusconnect.db` from this folder.
+3. Switch to the **Browse Data** tab.
+4. Select any table (`ambassadors`, `tasks`, `task_completions`, `github_analyses`, `placement_drives`, `drive_offers`, etc.).
+5. As you complete tasks, register ambassadors, analyze GitHub profiles, or create placement drives in the browser, press **Refresh (F5)** in DB Browser to watch the database update in real time!
+
+### 3. View via Terminal CLI
+You can also inspect the SQLite database anytime from the terminal:
+```bash
+python view_db.py
+```
 
 ## 🗂️ Projects
 This repository contains two distinct projects, also viewable in the app's **Projects** tab.
